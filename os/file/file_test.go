@@ -12,7 +12,7 @@ func TestLoad(t *testing.T) {
 	data := "Hello, World!"
 	expect := []byte(data)
 
-	f := createFile("test-file", data, "", t)
+	f := createTempFile("test-file", data, "", t)
 
 	if got := Load(f.Name()); !equal(expect, got) {
 		t.Fatalf("expect %q\ngot: %q", expect, got)
@@ -20,14 +20,18 @@ func TestLoad(t *testing.T) {
 }
 
 func TestCreateFile(t *testing.T) {
-	file := CreateFile("../../test/", "tempFile")
+	fileName := "tempFile"
+	testDir := "../../test/"
+	file := CreateFile(testDir, fileName)
 
 	expect := "tempFile"
 	got := filename(file.Name())
 
 	if expect != got {
-		t.Fatalf("expect filename to be %s, but got %s", expect, got)
+		t.Fatalf("expect filename to be %s\ngot %s", expect, got)
 	}
+
+	os.Remove(testDir + fileName)
 }
 
 func TestFilterFileByExtension(t *testing.T) {
@@ -46,7 +50,7 @@ func TestFilterFileByExtension(t *testing.T) {
 	got := FilterFilesByExtension(files, "yml")
 
 	if !equal(expect, got) {
-		t.Fatalf("expect filtered files to be %v, but got %v", expect, got)
+		t.Fatalf("expect filtered files to be %v\ngot %v", expect, got)
 	}
 
 	expect = []string{}
@@ -54,13 +58,13 @@ func TestFilterFileByExtension(t *testing.T) {
 	got = FilterFilesByExtension(files, "jpg")
 
 	if !equal(expect, got) {
-		t.Fatalf("expect filtered files to be %v, but got %v", expect, got)
+		t.Fatalf("expect filtered files to be %v\ngot %v", expect, got)
 	}
 }
 
 // -------- Helpers
 
-func createFile(name, contents, dir string, t *testing.T) *os.File {
+func createTempFile(name, contents, dir string, t *testing.T) *os.File {
 	f, err := ioutil.TempFile(dir, name)
 
 	if err != nil {
