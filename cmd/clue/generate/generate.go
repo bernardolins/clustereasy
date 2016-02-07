@@ -12,6 +12,7 @@ func init() {
 
 type Command struct {
 	command *cobra.Command
+	input   string
 	units   string
 }
 
@@ -25,6 +26,7 @@ func New() *Command {
 		},
 	}
 
+	generate.command.Flags().StringVarP(&generate.input, "input", "i", "", "Path to input file")
 	generate.command.Flags().StringVarP(&generate.units, "units", "u", "", "Path to units")
 
 	return generate
