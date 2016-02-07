@@ -23,14 +23,14 @@ func TestApply(t *testing.T) {
 	got := data.GetToken()
 
 	if expect != got {
-		t.Fatalf("expect %s, got %s", expect, got)
+		t.Fatalf("expect %s\ngot %s", expect, got)
 	}
 
 	expect = "existed"
 	got = data.GetState()
 
 	if expect != got {
-		t.Fatalf("expect %s, got %s", expect, got)
+		t.Fatalf("expect %s\ngot %s", expect, got)
 	}
 
 	expect = "test1"
@@ -39,6 +39,6 @@ func TestApply(t *testing.T) {
 	got = nodes[0].NodeName()
 
 	if expect != got {
-		t.Fatalf("expect %s, got %s", expect, got)
+		t.Fatalf("expect %s\ngot %s", expect, got)
 	}
 }
