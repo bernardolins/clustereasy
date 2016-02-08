@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/bernardolins/clustereasy/cmd/clue"
+	"github.com/bernardolins/clustereasy/cmd"
 	"os"
 )
 
 func main() {
-	if err := clue.Command.Execute(); err != nil {
+	if err := cmd.ClueCommand.Execute(); err != nil {
 		fmt.Printf("%v", err)
 		os.Exit(1)
 	}

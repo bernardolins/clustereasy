@@ -1,7 +1,7 @@
-package init
+package setup
 
 import (
-	"github.com/bernardolins/clustereasy/init/types"
+	"github.com/bernardolins/clustereasy/setup/types"
 )
 
 type InitData struct {

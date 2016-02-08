@@ -1,10 +1,10 @@
-package clue
+package cmd
 
 import (
 	"github.com/spf13/cobra"
 )
 
-var Command = &cobra.Command{
+var ClueCommand = &cobra.Command{
 	Use: "clue",
 	Run: func(cmd *cobra.Command, args []string) {
 		printHelp()
@@ -12,5 +12,4 @@ var Command = &cobra.Command{
 }
 
 func printHelp() {
-
 }

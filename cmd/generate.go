@@ -1,36 +1,57 @@
-package generate
+package cmd
 
 import (
-	"github.com/bernardolins/clustereasy/cmd/clue"
+	"fmt"
+	"github.com/bernardolins/clustereasy/os/file"
+	"github.com/bernardolins/clustereasy/setup"
 	"github.com/spf13/cobra"
+	"log"
+	"os"
 )
 
 func init() {
 	generateCommand := New()
-	clue.Command.AddCommand(generateCommand.command)
+	ClueCommand.AddCommand(generateCommand.Command)
 }
 
-type Command struct {
-	command *cobra.Command
+type GenerateCommand struct {
+	Command *cobra.Command
 	input   string
 	units   string
 }
 
-func New() *Command {
-	generate := new(Command)
+func New() *GenerateCommand {
+	generate := new(GenerateCommand)
 
-	generate.command = &cobra.Command{
+	generate.Command = &cobra.Command{
 		Use: "generate",
 		Run: func(cmd *cobra.Command, args []string) {
-			generate.run()
+			if err := generate.validateInput(); err != nil {
+				generate.run()
+			} else {
+				log.Fatalf("%v", err)
+				os.Exit(1)
+			}
 		},
 	}
 
-	generate.command.Flags().StringVarP(&generate.input, "input", "i", "", "Path to input file")
-	generate.command.Flags().StringVarP(&generate.units, "units", "u", "", "Path to units")
+	generate.Command.Flags().StringVarP(&generate.input, "input", "i", "", "Path to input file")
+	generate.Command.Flags().StringVarP(&generate.units, "units", "u", "", "Path to units")
 
 	return generate
 }
 
-func (generate *Command) run() {
+func (generate *GenerateCommand) run() {
+	input := file.Load(generate.input)
+	initData := setup.Apply(input)
+
+	fmt.Printf("%+v", initData)
+}
+
+func (generate *GenerateCommand) validateInput() error {
+	if generate.input == "" {
+		return fmt.Errorf("Input file path missing!")
+	}
+
+	return nil
 }
