@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/bernardolins/clustereasy/os/file"
+	"github.com/bernardolins/clustereasy/scope/coreos"
 	"github.com/bernardolins/clustereasy/setup"
 	"github.com/spf13/cobra"
 	"log"
@@ -47,7 +48,10 @@ func (generate *GenerateCommand) run() {
 	input := file.Load(generate.input)
 	initData := setup.Apply(input)
 
-	fmt.Printf("%+v", initData)
+	for _, node := range initData.Cluster.Nodes {
+		coreos := coreos.CreateScope(node, initData.Cluster)
+		fmt.Printf("Node %s\n\t: %+v\n", node.NodeName(), coreos)
+	}
 }
 
 func (generate *GenerateCommand) validateInput() error {
