@@ -5,6 +5,7 @@ import (
 	"github.com/bernardolins/clustereasy/os/file"
 	"github.com/bernardolins/clustereasy/scope/coreos"
 	"github.com/bernardolins/clustereasy/setup"
+	"github.com/bernardolins/clustereasy/templates"
 	"github.com/spf13/cobra"
 	"log"
 	"os"
@@ -50,7 +51,8 @@ func (generate *GenerateCommand) run() {
 
 	for _, node := range initData.Cluster.Nodes {
 		coreos := coreos.CreateScope(node, initData.Cluster)
-		fmt.Printf("Node %s\n\t: %+v\n", node.NodeName(), coreos)
+
+		templates.ExecuteTemplate(templates.ScopeTemplateContent(), *coreos)
 	}
 }
 
