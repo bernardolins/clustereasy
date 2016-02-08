@@ -5,22 +5,26 @@ import (
 )
 
 type Scope struct {
-	name     string
-	services []service.Service
+	Name     string
+	Services []service.Service
 }
 
-func New(name string) *Scope {
+func New(Name string) *Scope {
 	s := new(Scope)
 
-	s.name = name
+	s.Name = Name
 
 	return s
 }
 
 func (s *Scope) AddService(service service.Service) {
-	s.services = append(s.services, service)
+	s.Services = append(s.Services, service)
 }
 
 func (s *Scope) GetServices() []service.Service {
-	return s.services
+	return s.Services
+}
+
+func (s *Scope) GetName() string {
+	return s.Name
 }
