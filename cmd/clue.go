@@ -5,7 +5,7 @@ import (
 )
 
 var ClueCommand = &cobra.Command{
-	Use: "clue",
+	Use: "cluectl",
 	Run: func(cmd *cobra.Command, args []string) {
 		printHelp()
 	},
