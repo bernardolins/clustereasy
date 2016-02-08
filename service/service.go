@@ -30,5 +30,7 @@ import (
 //}
 
 type Service interface {
+	GetName() string
+	GetParameters() map[string]string
 	Configure(types.Node, types.Cluster)
 }
