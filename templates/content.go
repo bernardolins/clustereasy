@@ -7,6 +7,9 @@ func ScopeTemplateContent() string {
   {{ range .Services }}{{ .GetName }}:
     {{ range $key, $value := .GetParameters }}{{ $key }}: {{ $value }}
     {{ end }}
-  {{ end }}
+  {{ end }}units:
+    {{ range .Units }}- name: {{ .GetName }}
+      command: {{ .GetCommand }}
+		{{ end }}
 `
 }
