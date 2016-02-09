@@ -6,6 +6,7 @@ import (
 	"github.com/bernardolins/clustereasy/service/flannel"
 	"github.com/bernardolins/clustereasy/service/fleet"
 	"github.com/bernardolins/clustereasy/setup/types"
+	"github.com/bernardolins/clustereasy/unit"
 )
 
 func CreateScope(node types.Node, cluster types.Cluster) *scope.Scope {
@@ -24,5 +25,14 @@ func CreateScope(node types.Node, cluster types.Cluster) *scope.Scope {
 	coreos.AddService(*fleet)
 	coreos.AddService(*flannel)
 
+	configureUnits(coreos, cluster)
+
 	return coreos
+}
+
+func configureUnits(scope *scope.Scope, cluster types.Cluster) {
+	for _, u := range cluster.GetUnits() {
+		unit := unit.New(u.UnitName(), u.UnitCommand())
+		scope.AddUnit(*unit)
+	}
 }
