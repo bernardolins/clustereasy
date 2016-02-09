@@ -2,11 +2,13 @@ package scope
 
 import (
 	"github.com/bernardolins/clustereasy/service"
+	"github.com/bernardolins/clustereasy/unit"
 )
 
 type Scope struct {
 	Name     string
 	Services []service.Service
+	Units    []unit.Unit
 }
 
 func New(Name string) *Scope {
@@ -27,4 +29,8 @@ func (s *Scope) GetServices() []service.Service {
 
 func (s *Scope) GetName() string {
 	return s.Name
+}
+
+func (s *Scope) AddUnit(unit unit.Unit) {
+	s.Units = append(s.Units, unit)
 }

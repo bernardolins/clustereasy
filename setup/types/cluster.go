@@ -4,6 +4,7 @@ type Cluster struct {
 	Token string `yaml: "token,omitempty"`
 	State string `yaml: "state,omitempty"`
 	Nodes []Node `yaml: "nodes"`
+	Units []Unit `yaml: "units"`
 }
 
 func (c *Cluster) GetToken() string {
@@ -24,4 +25,8 @@ func (c *Cluster) GetState() string {
 
 func (c *Cluster) GetNodes() []Node {
 	return c.Nodes
+}
+
+func (c *Cluster) GetUnits() []Unit {
+	return c.Units
 }
