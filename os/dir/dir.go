@@ -30,3 +30,15 @@ func CreateDir(dirname string) {
 		os.Exit(1)
 	}
 }
+
+func HasFile(dirname, filename string) bool {
+	files := Ls(dirname)
+
+	for _, file := range files {
+		if file == filename {
+			return true
+		}
+	}
+
+	return false
+}
