@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/bernardolins/clustereasy/os/dir"
 	"github.com/bernardolins/clustereasy/os/file"
+	"github.com/bernardolins/clustereasy/scope"
 	"github.com/bernardolins/clustereasy/scope/coreos"
 	"github.com/bernardolins/clustereasy/setup"
 	"github.com/bernardolins/clustereasy/templates"
@@ -51,8 +53,22 @@ func (generate *GenerateCommand) run() {
 
 	for _, node := range initData.Cluster.Nodes {
 		coreos := coreos.CreateScope(node, initData.Cluster)
+		checkUnitContentFile(coreos, generate.units)
 
 		templates.ExecuteTemplate(templates.ScopeTemplateContent(), *coreos)
+	}
+}
+
+func checkUnitContentFile(scope *scope.Scope, path string) {
+	if path != "" {
+		for _, unit := range scope.GetUnits() {
+			if dir.HasFile(path, unit.GetName()) {
+				content := file.Load(path + unit.GetName())
+				unit.SetContent(string(content))
+
+				fmt.Printf(unit.GetContent())
+			}
+		}
 	}
 }
 

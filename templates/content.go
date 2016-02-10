@@ -10,6 +10,9 @@ func ScopeTemplateContent() string {
   {{ end }}units:
     {{ range .Units }}- name: {{ .GetName }}
       command: {{ .GetCommand }}
+      {{ if .GetContent }}content: |{{ end }}
+        {{ range $key, $line := .ContentLines }}{{ $line }}
+        {{ end }}
     {{ end }}
 `
 }
