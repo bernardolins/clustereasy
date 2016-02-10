@@ -8,7 +8,7 @@ import (
 type Scope struct {
 	Name     string
 	Services []service.Service
-	Units    []unit.Unit
+	Units    []*unit.Unit
 }
 
 func New(Name string) *Scope {
@@ -31,6 +31,10 @@ func (s *Scope) GetName() string {
 	return s.Name
 }
 
-func (s *Scope) AddUnit(unit unit.Unit) {
+func (s *Scope) GetUnits() []*unit.Unit {
+	return s.Units
+}
+
+func (s *Scope) AddUnit(unit *unit.Unit) {
 	s.Units = append(s.Units, unit)
 }
