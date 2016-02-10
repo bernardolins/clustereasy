@@ -7,7 +7,7 @@ import (
 	"github.com/bernardolins/clustereasy/service/fleet"
 	"github.com/bernardolins/clustereasy/setup/types"
 	"github.com/bernardolins/clustereasy/unit"
-	"github.com/bernardolins/clustereasy/unit/default/coreos"
+	"github.com/bernardolins/clustereasy/unit/default"
 )
 
 func CreateScope(node types.Node, cluster types.Cluster) *scope.Scope {
@@ -34,7 +34,7 @@ func CreateScope(node types.Node, cluster types.Cluster) *scope.Scope {
 func configureUnits(scope *scope.Scope, cluster types.Cluster) {
 	for _, u := range cluster.GetUnits() {
 		unit := unit.New(u.UnitName(), u.UnitCommand())
-		scope.AddUnit(*unit)
+		scope.AddUnit(unit)
 	}
 
 	for _, u := range unitdef.DefaultUnits() {
