@@ -10,6 +10,6 @@ func ScopeTemplateContent() string {
   {{ end }}units:
     {{ range .Units }}- name: {{ .GetName }}
       command: {{ .GetCommand }}
-		{{ end }}
+    {{ end }}
 `
 }
