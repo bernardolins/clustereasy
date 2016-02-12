@@ -13,3 +13,6 @@ Features:
 1. Add support to units
 2. Add unit content if a directory containing unit name is passed as parameter
 
+#### v0.2.1 - 2016/02/11
+Features:
+1. Extend default units support
