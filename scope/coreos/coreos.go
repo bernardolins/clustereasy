@@ -26,18 +26,19 @@ func CreateScope(node types.Node, cluster types.Cluster) *scope.Scope {
 	coreos.AddService(*fleet)
 	coreos.AddService(*flannel)
 
-	configureUnits(coreos, cluster)
+	configureUnits(coreos, node, cluster)
 
 	return coreos
 }
 
-func configureUnits(scope *scope.Scope, cluster types.Cluster) {
+func configureUnits(scope *scope.Scope, node types.Node, cluster types.Cluster) {
 	for _, u := range cluster.GetUnits() {
-		unit := unit.New(u.UnitName(), u.UnitCommand())
+		unit := unit.New(u.UnitName())
+		unit.Configure(u)
 		scope.AddUnit(unit)
 	}
 
-	for _, u := range unitdef.DefaultUnits() {
+	for _, u := range unitdef.DefaultUnits(node) {
 		scope.AddUnit(u)
 	}
 }
