@@ -7,16 +7,20 @@ import (
 
 type Unit struct {
 	name    string
+	params  map[string]interface{}
 	command string
-	content string
 	runtime bool
 	enable  bool
+	content string
+	dropins []DropIn
 }
 
 func New(name string) *Unit {
 	u := new(Unit)
 
 	u.name = name
+
+	u.params = make(map[string]interface{})
 	//u.command = unit.UnitCommand()
 	//u.runtime = unit.UnitRuntime()
 	//u.enable = unit.UnitEnable()
@@ -24,20 +28,28 @@ func New(name string) *Unit {
 	return u
 }
 
-func (u Unit) GetName() string {
+func (u Unit) Name() string {
 	return u.name
 }
 
-func (u Unit) GetCommand() string {
+func (u Unit) Command() string {
 	return u.command
 }
 
-func (u Unit) GetContent() string {
+func (u Unit) Content() string {
 	return u.content
 }
 
-func (u Unit) GetRuntime() bool {
+func (u Unit) Runtime() bool {
 	return u.runtime
+}
+
+func (u Unit) Enable() bool {
+	return u.enable
+}
+
+func (u Unit) Parameters() map[string]interface{} {
+	return u.params
 }
 
 // ---------------------
@@ -46,7 +58,7 @@ func (u *Unit) AddCommand(command string) {
 	u.command = command
 }
 
-func (u *Unit) Enable() {
+func (u *Unit) SetEnable() {
 	u.enable = true
 }
 
@@ -59,9 +71,9 @@ func (u *Unit) SetContent(content string) {
 }
 
 func (u *Unit) Configure(unit types.Unit) {
-	u.command = unit.UnitCommand()
-	u.runtime = unit.UnitRuntime()
-	u.enable = unit.UnitEnable()
+	u.params["command"] = unit.UnitCommand()
+	u.params["enable"] = unit.UnitEnable()
+	u.params["runtime"] = unit.UnitRuntime()
 }
 
 // ---------------------
