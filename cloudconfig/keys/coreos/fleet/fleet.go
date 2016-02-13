@@ -5,27 +5,28 @@ import (
 )
 
 type Fleet struct {
-	Name       string
-	Parameters map[string]string
+	name       string
+	parameters map[string]string
 }
 
-func New() *Fleet {
+func Configure(node types.Node, cluster types.Cluster) Fleet {
 	fleet := new(Fleet)
+	fleet.name = "fleet"
+	fleet.parameters = make(map[string]string)
 
-	fleet.Name = "fleet"
-	fleet.Parameters = make(map[string]string)
+	fleet.configure(node, cluster)
 
-	return fleet
+	return *fleet
 }
 
-func (fleet Fleet) GetName() string {
-	return fleet.Name
+func (fleet Fleet) Name() string {
+	return fleet.name
 }
 
-func (fleet Fleet) GetParameters() map[string]string {
-	return fleet.Parameters
+func (fleet Fleet) Parameters() map[string]string {
+	return fleet.parameters
 }
 
-func (fleet Fleet) Configure(node types.Node, cluster types.Cluster) {
-	fleet.Parameters["public-ip"] = node.NodeIp()
+func (fleet Fleet) configure(node types.Node, cluster types.Cluster) {
+	fleet.parameters["public-ip"] = node.NodeIp()
 }

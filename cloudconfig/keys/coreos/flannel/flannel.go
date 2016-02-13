@@ -5,27 +5,28 @@ import (
 )
 
 type Flannel struct {
-	Name       string
-	Parameters map[string]string
+	name       string
+	parameters map[string]string
 }
 
-func New() *Flannel {
+func Configure(node types.Node, cluster types.Cluster) Flannel {
 	flannel := new(Flannel)
+	flannel.name = "flannel"
+	flannel.parameters = make(map[string]string)
 
-	flannel.Name = "flannel"
-	flannel.Parameters = make(map[string]string)
+	flannel.configure(node, cluster)
 
-	return flannel
+	return *flannel
 }
 
-func (flannel Flannel) GetName() string {
-	return flannel.Name
+func (flannel Flannel) Name() string {
+	return flannel.name
 }
 
-func (flannel Flannel) GetParameters() map[string]string {
-	return flannel.Parameters
+func (flannel Flannel) Parameters() map[string]string {
+	return flannel.parameters
 }
 
-func (flannel Flannel) Configure(node types.Node, cluster types.Cluster) {
-	flannel.Parameters["interface"] = node.NodeIp()
+func (flannel Flannel) configure(node types.Node, cluster types.Cluster) {
+	flannel.parameters["interface"] = node.NodeIp()
 }
