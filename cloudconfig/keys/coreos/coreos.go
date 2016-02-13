@@ -12,12 +12,12 @@ type CoreOS struct {
 	etcd2   etcd2.Etcd2
 	fleet   fleet.Fleet
 	flannel flannel.Flannel
-	units   map[string]unit.Unit
+	units   map[string]*unit.Unit
 }
 
 func New() *CoreOS {
 	c := new(CoreOS)
-	c.units = make(map[string]unit.Unit)
+	c.units = make(map[string]*unit.Unit)
 
 	return c
 }
@@ -38,7 +38,7 @@ func configureUnits(coreos *CoreOS, cluster types.Cluster) {
 	for _, unt := range cluster.GetUnits() {
 		coreUnit := unit.New(unt.UnitName())
 		coreUnit.Configure(unt)
-		coreos.units[unt.UnitName()] = *coreUnit
+		coreos.units[unt.UnitName()] = coreUnit
 	}
 }
 
@@ -55,6 +55,6 @@ func (c CoreOS) Flannel() flannel.Flannel {
 
 }
 
-func (c CoreOS) Units() map[string]unit.Unit {
+func (c CoreOS) Units() map[string]*unit.Unit {
 	return c.units
 }
