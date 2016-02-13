@@ -32,18 +32,15 @@ func CoreOS() string {
     {{end}}
   fleet:
     {{ range $parameter, $value := .Fleet.Parameters }}{{ $parameter }}: {{ $value }}
-	  {{ end }}
+    {{ end }}
   flannel:
     {{ range $parameter, $value := .Flannel.Parameters }}{{ $parameter }}: {{ $value }}
-	  {{ end }}
+    {{ end }}
   units:
-    {{ range $name, $unit := .Units}}- {{ $name }}
-		{{ $unit }}
+    {{ range $name, $unit := .Units}}- name: {{ $name }}
       {{ range $param, $value := .Parameters }}{{ if $value }}{{ $param }}: {{ $value }}{{ end }}
-    {{ end }}
-      {{ if .Content }}content: |
-      {{ range $key, $line := .ContentLines }}{{ $line }}{{ end }}
-			{{ end }}
-    {{ end }}
-	`
+      {{ end }}{{ if .Content }}content: |
+        {{ range $key, $line := .ContentLines }}{{ $line }}
+        {{ end }}{{ end }}
+    {{ end }}`
 }
