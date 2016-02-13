@@ -21,9 +21,6 @@ func New(name string) *Unit {
 	u.name = name
 
 	u.params = make(map[string]interface{})
-	//u.command = unit.UnitCommand()
-	//u.runtime = unit.UnitRuntime()
-	//u.enable = unit.UnitEnable()
 
 	return u
 }
@@ -32,20 +29,12 @@ func (u Unit) Name() string {
 	return u.name
 }
 
-func (u Unit) Command() string {
-	return u.command
+func (u Unit) Param(param string) interface{} {
+	return u.params[param]
 }
 
 func (u Unit) Content() string {
 	return u.content
-}
-
-func (u Unit) Runtime() bool {
-	return u.runtime
-}
-
-func (u Unit) Enable() bool {
-	return u.enable
 }
 
 func (u Unit) Parameters() map[string]interface{} {
@@ -54,16 +43,19 @@ func (u Unit) Parameters() map[string]interface{} {
 
 // ---------------------
 
+func (u *Unit) SetParameter(param string, value interface{}) {
+	u.params[param] = value
+}
 func (u *Unit) AddCommand(command string) {
-	u.command = command
+	u.params["command"] = command
 }
 
 func (u *Unit) SetEnable() {
-	u.enable = true
+	u.params["enable"] = true
 }
 
 func (u *Unit) OnRuntime() {
-	u.runtime = true
+	u.params["runtime"] = true
 }
 
 func (u *Unit) SetContent(content string) {

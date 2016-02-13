@@ -29,17 +29,24 @@ func ConfigureCoreOS(node types.Node, cluster types.Cluster) CoreOS {
 	coreos.fleet = fleet.Configure(node, cluster)
 	coreos.flannel = flannel.Configure(node, cluster)
 
-	configureUnits(coreos, cluster)
+	configureUnits(coreos, node, cluster)
 
 	return *coreos
 }
 
-func configureUnits(coreos *CoreOS, cluster types.Cluster) {
+func configureUnits(coreos *CoreOS, node types.Node, cluster types.Cluster) {
 	for _, unt := range cluster.GetUnits() {
 		coreUnit := unit.New(unt.UnitName())
 		coreUnit.Configure(unt)
 		coreos.units[unt.UnitName()] = coreUnit
 	}
+
+	for _, unt := range unit.DefaultUnits() {
+		coreos.units[unt.Name()] = unt
+	}
+
+	networkUnit := unit.Network(node)
+	coreos.units[networkUnit.Name()] = networkUnit
 }
 
 func (c CoreOS) Etcd2() etcd2.Etcd2 {

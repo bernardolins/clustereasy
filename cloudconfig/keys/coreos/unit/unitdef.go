@@ -1,63 +1,47 @@
-package unitdef
+package unit
 
 import (
+	"fmt"
 	"github.com/bernardolins/clustereasy/setup/types"
-	"github.com/bernardolins/clustereasy/unit"
-	"github.com/bernardolins/clustereasy/unit/default/unitcont"
 )
 
-func DefaultUnits(node types.Node) []*unit.Unit {
-	def := []*unit.Unit{
+func DefaultUnits() []*Unit {
+	def := []*Unit{
 		etcd2(),
 		fleet(),
 		flannel(),
-		staticNetwork(node),
 	}
 
 	return def
 }
 
-func defaultContentlessUnit(name, command string) *unit.Unit {
-	u := unit.New(name)
+func etcd2() *Unit {
+	u := New("etcd2")
+	u.SetParameter("command", "start")
 
 	return u
 }
 
-func DefaultContentUnit(name, command, content string) *unit.Unit {
-	u := unit.New(name)
+func fleet() *Unit {
+	u := New("fleet")
+	u.SetParameter("command", "start")
 
 	return u
 }
 
-func staticNetwork(node types.Node) *unit.Unit {
-	if node.NodeIp() != "" {
-		u := unit.New("10-" + node.NodeInterface() + ".network")
-		u.OnRuntime()
-		u.SetContent(unitcont.DefaultStaticIp(node))
-
-		return u
-	}
-
-	return nil
-}
-
-func etcd2() *unit.Unit {
-	u := unit.New("etcd2")
-	u.AddCommand("start")
+func flannel() *Unit {
+	u := New("flannel")
+	u.SetParameter("command", "start")
 
 	return u
 }
 
-func fleet() *unit.Unit {
-	u := unit.New("fleet")
-	u.AddCommand("start")
+func Network(node types.Node) *Unit {
+	content := fmt.Sprintf("[Match]\nName=%s\n[Network]\nAddress=%s", node.NodeInterface(), node.NodeIp())
 
-	return u
-}
-
-func flannel() *unit.Unit {
-	u := unit.New("flannel")
-	u.AddCommand("start")
+	u := New("static.network")
+	u.SetParameter("runtime", true)
+	u.SetContent(content)
 
 	return u
 }
