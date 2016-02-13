@@ -2,10 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/bernardolins/clustereasy/cloudconfig/header"
+	"github.com/bernardolins/clustereasy/cloudconfig/keys/coreos"
 	"github.com/bernardolins/clustereasy/os/dir"
 	"github.com/bernardolins/clustereasy/os/file"
-	"github.com/bernardolins/clustereasy/scope"
-	"github.com/bernardolins/clustereasy/scope/coreos"
+	//"github.com/bernardolins/clustereasy/scope"
+	//"github.com/bernardolins/clustereasy/scope/coreos"
 	"github.com/bernardolins/clustereasy/setup"
 	"github.com/bernardolins/clustereasy/templates"
 	"github.com/spf13/cobra"
@@ -51,22 +53,24 @@ func (generate *GenerateCommand) run() {
 	input := file.Load(generate.input)
 	initData := setup.Apply(input)
 
-	for _, node := range initData.Cluster.Nodes {
-		coreos := coreos.CreateScope(node, initData.Cluster)
-		checkUnitContentFile(coreos, generate.units)
+	header := header.New()
 
-		templates.ExecuteTemplate(templates.ScopeTemplateContent(), *coreos)
+	for _, node := range initData.Cluster.Nodes {
+		coreos := coreos.ConfigureCoreOS(node, initData.Cluster)
+		checkUnitContentFile(&coreos, generate.units)
+		//templates.ExecuteTemplate(templates.ScopeTemplateContent(), coreos)
+
+		templates.ExecuteTemplate(templates.Header(), header)
+		templates.ExecuteTemplate(templates.CoreOS(), coreos)
 	}
 }
 
-func checkUnitContentFile(scope *scope.Scope, path string) {
+func checkUnitContentFile(coreos *coreos.CoreOS, path string) {
 	if path != "" {
-		for _, unit := range scope.GetUnits() {
-			if dir.HasFile(path, unit.GetName()) {
-				content := file.Load(path + unit.GetName())
+		for _, unit := range coreos.Units() {
+			if dir.HasFile(path, unit.Name()) {
+				content := file.Load(path + unit.Name())
 				unit.SetContent(string(content))
-
-				fmt.Printf(unit.GetContent())
 			}
 		}
 	}

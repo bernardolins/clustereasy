@@ -1,14 +1,13 @@
 package templates
 
 import (
-	"github.com/bernardolins/clustereasy/scope"
 	"log"
 	"os"
 	"text/template"
 )
 
-func ExecuteTemplate(temp string, scope scope.Scope) {
-	t := template.New(scope.GetName())
+func ExecuteTemplate(temp string, model interface{}) {
+	t := template.New("template")
 	t, err := t.Parse(temp)
 
 	if err != nil {
@@ -16,5 +15,5 @@ func ExecuteTemplate(temp string, scope scope.Scope) {
 		os.Exit(1)
 	}
 
-	t.Execute(os.Stdout, scope)
+	t.Execute(os.Stdout, model)
 }
