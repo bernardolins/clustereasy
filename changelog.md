@@ -16,3 +16,7 @@ Features:
 #### v0.2.1 - 2016/02/11
 Features:
 1. Extend default units support
+
+#### v0.3.0 - 2016/02/15
+Features:
+1. Major refactors to code
